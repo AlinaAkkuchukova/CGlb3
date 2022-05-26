@@ -50,7 +50,7 @@ static void RenderSceneCB()
 
     static float Scale = 0.0f;
 
-    Scale += 0.1f;
+    Scale += 0.3f;
 
     Pipeline p;
     p.Rotate(0.0f, Scale, 0.0f);
@@ -89,9 +89,9 @@ static void InitializeGlutCallbacks()
 static void CreateVertexBuffer()
 {
     Vector3f Vertices[4];
-    Vertices[0] = Vector3f(-1.0f, -1.0f, 0.0f);
-    Vertices[1] = Vector3f(0.0f, -1.0f, 1.0f);
-    Vertices[2] = Vector3f(1.0f, -1.0f, 0.0f);
+    Vertices[0] = Vector3f(-1.0f, -1.0f, 1.0f);
+    Vertices[1] = Vector3f(0.0f, -1.0f, -1.0f);
+    Vertices[2] = Vector3f(1.0f, -1.0f, 1.0f);
     Vertices[3] = Vector3f(0.0f, 1.0f, 0.0f);
 
     glGenBuffers(1, &VBO);
