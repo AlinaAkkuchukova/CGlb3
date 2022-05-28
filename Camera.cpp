@@ -2,7 +2,7 @@
 
 #include "camera.h"
 
-const static float StepScale = 1.0f;
+const static float STEP_SCALE = 0.1f;
 const static int MARGIN = 10;
 
 Camera::Camera(int WindowWidth, int WindowHeight)
@@ -32,6 +32,7 @@ Camera::Camera(int WindowWidth, int WindowHeight, const Vector3f& Pos, const Vec
 
     Init();
 }
+
 
 void Camera::Init()
 {
@@ -63,15 +64,12 @@ void Camera::Init()
 
     m_AngleV = -ToDegree(asin(m_target.y));
 
-    m_OnUpperEdge = false;
-    m_OnLowerEdge = false;
-    m_OnLeftEdge = false;
-    m_OnRightEdge = false;
     m_mousePos.x = m_windowWidth / 2;
     m_mousePos.y = m_windowHeight / 2;
 
     glutWarpPointer(m_mousePos.x, m_mousePos.y);
 }
+
 
 bool Camera::OnKeyboard(int Key)
 {
@@ -81,14 +79,14 @@ bool Camera::OnKeyboard(int Key)
 
     case GLUT_KEY_UP:
     {
-        m_pos += (m_target * StepScale);
+        m_pos += (m_target * STEP_SCALE);
         Ret = true;
     }
     break;
 
     case GLUT_KEY_DOWN:
     {
-        m_pos -= (m_target * StepScale);
+        m_pos -= (m_target * STEP_SCALE);
         Ret = true;
     }
     break;
@@ -97,7 +95,7 @@ bool Camera::OnKeyboard(int Key)
     {
         Vector3f Left = m_target.Cross(m_up);
         Left.Normalize();
-        Left *= StepScale;
+        Left *= STEP_SCALE;
         m_pos += Left;
         Ret = true;
     }
@@ -107,7 +105,7 @@ bool Camera::OnKeyboard(int Key)
     {
         Vector3f Right = m_up.Cross(m_target);
         Right.Normalize();
-        Right *= StepScale;
+        Right *= STEP_SCALE;
         m_pos += Right;
         Ret = true;
     }
@@ -117,72 +115,25 @@ bool Camera::OnKeyboard(int Key)
     return Ret;
 }
 
+
 void Camera::OnMouse(int x, int y)
 {
+    if ((x == m_mousePos.x) && (y == m_mousePos.y)) return;
+
     const int DeltaX = x - m_mousePos.x;
     const int DeltaY = y - m_mousePos.y;
-
-    m_mousePos.x = x;
-    m_mousePos.y = y;
 
     m_AngleH += (float)DeltaX / 20.0f;
     m_AngleV += (float)DeltaY / 20.0f;
 
-    if (DeltaX == 0) {
-        if (x <= MARGIN) {
-            m_OnLeftEdge = true;
-        }
-        else if (x >= (m_windowWidth - MARGIN)) {
-            m_OnRightEdge = true;
-        }
-    }
-    else {
-        m_OnLeftEdge = false;
-        m_OnRightEdge = false;
-    }
-
-    if (DeltaY == 0) {
-        if (y <= MARGIN) {
-            m_OnUpperEdge = true;
-        }
-        else if (y >= (m_windowHeight - MARGIN)) {
-            m_OnLowerEdge = true;
-        }
-    }
-    else {
-        m_OnUpperEdge = false;
-        m_OnLowerEdge = false;
-    }
-
     Update();
+    glutWarpPointer(m_mousePos.x, m_mousePos.y);
 }
 
 
 void Camera::OnRender()
 {
     bool ShouldUpdate = false;
-
-    if (m_OnLeftEdge) {
-        m_AngleH -= 0.1f;
-        ShouldUpdate = true;
-    }
-    else if (m_OnRightEdge) {
-        m_AngleH += 0.1f;
-        ShouldUpdate = true;
-    }
-
-    if (m_OnUpperEdge) {
-        if (m_AngleV > -90.0f) {
-            m_AngleV -= 0.1f;
-            ShouldUpdate = true;
-        }
-    }
-    else if (m_OnLowerEdge) {
-        if (m_AngleV < 90.0f) {
-            m_AngleV += 0.1f;
-            ShouldUpdate = true;
-        }
-    }
 
     if (ShouldUpdate) {
         Update();

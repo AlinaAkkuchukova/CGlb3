@@ -13,6 +13,23 @@ struct Vector2i
     int y;
 };
 
+struct Vector2f
+{
+    float x;
+    float y;
+
+    Vector2f()
+    {
+    }
+
+    Vector2f(float _x, float _y)
+    {
+        x = _x;
+        y = _y;
+    }
+};
+
+
 struct Vector3f
 {
     float x;
@@ -68,6 +85,7 @@ struct Vector3f
         printf("(%.02f, %.02f, %.02f", x, y, z);
     }
 };
+
 
 inline Vector3f operator+(const Vector3f& l, const Vector3f& r)
 {
@@ -137,6 +155,7 @@ public:
     void InitCameraTransform(const Vector3f& Target, const Vector3f& Up);
     void InitPersProjTransform(float FOV, float Width, float Height, float zNear, float zFar);
 };
+
 
 struct Quaternion
 {

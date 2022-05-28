@@ -3,6 +3,7 @@
 
 #include "math_3d.h"
 
+
 class Camera
 {
 public:
@@ -16,7 +17,6 @@ public:
     void OnMouse(int x, int y);
 
     void OnRender();
-
 
     const Vector3f& GetPos() const
     {
@@ -47,11 +47,6 @@ private:
 
     float m_AngleH;
     float m_AngleV;
-
-    bool m_OnUpperEdge;
-    bool m_OnLowerEdge;
-    bool m_OnLeftEdge;
-    bool m_OnRightEdge;
 
     Vector2i m_mousePos;
 };
