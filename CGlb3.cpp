@@ -39,7 +39,7 @@ public:
         m_pEffect = NULL;
         m_scale = 0.0f;
         m_directionalLight.Color = Vector3f(1.0f, 1.0f, 1.0f);
-        m_directionalLight.AmbientIntensity = -0.1f;
+        m_directionalLight.AmbientIntensity = 0.0f;
         m_directionalLight.DiffuseIntensity = 0.0f;
         m_directionalLight.Direction = Vector3f(1.0f, 0.0f, 0.0f);
     }
@@ -53,8 +53,8 @@ public:
 
     bool Init()
     {
-        Vector3f Pos(0.0f, 0.0f, 0.0f);
-        Vector3f Target(0.0f, 0.0f, 1.0f);
+        Vector3f Pos(-10.0f, 0.0f, -10.0f);
+        Vector3f Target(1.0f, 0.0f, 1.0f);
         Vector3f Up(0.0, 1.0f, 0.0f);
         m_pGameCamera = new Camera(WINDOW_WIDTH, WINDOW_HEIGHT, Pos, Target, Up);
 
@@ -69,14 +69,13 @@ public:
 
         if (!m_pEffect->Init())
         {
-            printf("Error initializing the lighting technique\n");
             return false;
         }
 
         m_pEffect->Enable();
 
         m_pEffect->SetTextureUnit(0);
-        Magick::InitializeMagick(nullptr); // <--- added this line
+        Magick::InitializeMagick(nullptr);
         m_pTexture = new Texture(GL_TEXTURE_2D, "C://2.jpg");
 
         if (!m_pTexture->Load()) {
@@ -99,25 +98,22 @@ public:
 
         m_scale += 0.01f;
 
-        PointLight pl[3];
-        pl[0].DiffuseIntensity = 0.5f;
-        pl[0].Color = Vector3f(1.0f, 0.0f, 0.0f);
-        pl[0].Position = Vector3f(sinf(m_scale) * 10, 1.0f, cosf(m_scale) * 10);
-        pl[0].Attenuation.Linear = 0.1f;
+        SpotLight sl[2];
+        sl[0].DiffuseIntensity = 15.0f;
+        sl[0].Color = Vector3f(1.0f, 1.0f, 0.7f);
+        sl[0].Position = Vector3f(-0.0f, -1.9f, -0.0f);
+        sl[0].Direction = Vector3f(sinf(m_scale), 0.0f, cosf(m_scale));
+        sl[0].Attenuation.Linear = 0.1f;
+        sl[0].Cutoff = 20.0f;
 
-        pl[1].DiffuseIntensity = 0.5f;
-        pl[1].Color = Vector3f(0.0f, 1.0f, 0.0f);
-        pl[1].Position = Vector3f(sinf(m_scale + 2.1f) * 10, 1.0f, cosf(m_scale + 2.1f) * 10);
-        pl[1].Attenuation.Linear = 0.1f;
+        sl[1].DiffuseIntensity = 5.0f;
+        sl[1].Color = Vector3f(0.0f, 1.0f, 1.0f);
+        sl[1].Position = m_pGameCamera->GetPos();
+        sl[1].Direction = m_pGameCamera->GetTarget();
+        sl[1].Attenuation.Linear = 0.1f;
+        sl[1].Cutoff = 10.0f;
 
-        pl[2].DiffuseIntensity = 0.5f;
-        pl[2].Color = Vector3f(0.0f, 0.0f, 1.0f);
-        pl[2].Position = Vector3f(sinf(m_scale + 4.2f) * 10, 1.0f, cosf(m_scale + 4.2f) * 10);
-        pl[2].Attenuation.Linear = 0.1f;
-
-        m_pEffect->SetPointLights(3, pl);
-
-
+        m_pEffect->SetSpotLights(2, sl);
 
 
         Pipeline p;
@@ -255,13 +251,11 @@ int main(int argc, char** argv)
 {
     GLUTBackendInit(argc, argv);
 
-    if (!GLUTBackendCreateWindow(WINDOW_WIDTH, WINDOW_HEIGHT, 32, false, "Tutorial 20")) {
+    if (!GLUTBackendCreateWindow(WINDOW_WIDTH, WINDOW_HEIGHT, 32, false, "Tutorial 21")) {
         return 1;
     }
 
     Main* pApp = new Main();
-
-    pApp->Init();
 
     if (!pApp->Init()) {
         return 1;

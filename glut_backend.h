@@ -10,4 +10,3 @@ bool GLUTBackendCreateWindow(unsigned int Width, unsigned int Height, unsigned i
 void GLUTBackendRun(ICallbacks* pCallbacks);
 
 #endif /* GLUT_BACKEND_H */
-
