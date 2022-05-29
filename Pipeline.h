@@ -50,8 +50,11 @@ public:
         m_camera.Up = Up;
     }
 
+
     const Matrix4f& GetWVPTrans();
+
     const Matrix4f& GetWorldTrans();
+
 
 private:
     Vector3f m_scale;

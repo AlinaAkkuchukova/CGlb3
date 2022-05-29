@@ -33,7 +33,6 @@ Camera::Camera(int WindowWidth, int WindowHeight, const Vector3f& Pos, const Vec
     Init();
 }
 
-
 void Camera::Init()
 {
     Vector3f HTarget(m_target.x, 0.0, m_target.z);
