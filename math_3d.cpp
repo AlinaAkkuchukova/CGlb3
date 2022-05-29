@@ -32,7 +32,6 @@ void Vector3f::Rotate(float Angle, const Vector3f& Axe)
     Quaternion RotationQ(Rx, Ry, Rz, Rw);
 
     Quaternion ConjugateQ = RotationQ.Conjugate();
-    //  ConjugateQ.Normalize();
     Quaternion W = RotationQ * (*this) * ConjugateQ;
 
     x = W.x;
